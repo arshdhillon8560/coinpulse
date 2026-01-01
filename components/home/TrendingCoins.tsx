@@ -39,7 +39,7 @@ const TrendingCoins = async () => {
         const change = item.data.price_change_percentage_24h.usd;
         const isTrendingUp = change > 0;
         const isNeutral = change === 0;
-        const isTrendingDown = change < 0;
+    
 
         return (
           <div className={cn('price-change',
