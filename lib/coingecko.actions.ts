@@ -11,7 +11,8 @@ if (!API_KEY) throw new Error('Could not get api key');
 export async function fetcher<T>(
   endpoint: string,
   params?: QueryParams,
-  revalidate = 60
+  revalidate = 60,
+  timeout = 5000
 ): Promise<T> {
   const url = qs.stringifyUrl(
     {
@@ -21,23 +22,38 @@ export async function fetcher<T>(
     { skipEmptyString: true, skipNull: true }
   );
 
-  const response = await fetch(url, {
-    headers: {
-      'x-cg-demo-api-key': API_KEY,
-      'Content-Type': 'application/json',
-    } as Record<string, string>,
-    next: { revalidate },
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, timeout);
 
-  if (!response.ok) {
-    const errorBody: CoinGeckoErrorBody = await response
-      .json()
-      .catch(() => ({}));
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'x-cg-demo-api-key': API_KEY,
+        'Content-Type': 'application/json',
+      } as Record<string, string>,
+      next: { revalidate },
+      signal: controller.signal,
+    });
 
-    throw new Error(
-      `API Error: ${response.status}: ${errorBody.error || response.statusText} `
-    );
+    if (!response.ok) {
+      const errorBody: CoinGeckoErrorBody = await response
+        .json()
+        .catch(() => ({}));
+
+      throw new Error(
+        `API Error: ${response.status}: ${errorBody.error || response.statusText} `
+      );
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error(`Request timeout after ${timeout}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return response.json();
 }

@@ -36,15 +36,22 @@ const TrendingCoins = async () => {
       cellClassName: 'change-cell',
       cell: (coin) => {
         const item = coin.item;
-        const isTrendingUp = item.data.price_change_percentage_24h.usd > 0;
+        const change = item.data.price_change_percentage_24h.usd;
+        const isTrendingUp = change > 0;
+        const isNeutral = change === 0;
+        const isTrendingDown = change < 0;
 
         return (
-          <div className={cn('price-change', isTrendingUp ? 'text-green-500' : 'text-red-500')}>
+          <div className={cn('price-change',
+            isTrendingUp ? 'text-green-500' :
+            isNeutral ? 'text-gray-500' :
+            'text-red-500'
+          )}>
             <p className="flex items-center">
               {formatPercentage(item.data.price_change_percentage_24h.usd)}
               {isTrendingUp ? (
                 <TrendingUp width={16} height={16} />
-              ) : (
+              ) : isNeutral ? null : (
                 <TrendingDown width={16} height={16} />
               )}
             </p>
