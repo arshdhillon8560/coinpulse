@@ -40,17 +40,20 @@ export function formatPercentage(change: number | null | undefined): string {
 
 export function trendingClasses(value: number) {
   const isTrendingUp = value > 0;
+  const isNeutral = value === 0;
+  const isTrendingDown = value < 0;
 
   return {
-    textClass: isTrendingUp ? 'text-green-400' : 'text-red-400',
-    bgClass: isTrendingUp ? 'bg-green-500/10' : 'bg-red-500/10',
-    iconClass: isTrendingUp ? 'icon-up' : 'icon-down',
+    textClass: isTrendingUp ? 'text-green-400' : isNeutral ? 'text-yellow-400' : 'text-red-400',
+    bgClass: isTrendingUp ? 'bg-green-500/10' : isNeutral ? 'bg-yellow-500/10' : 'bg-red-500/10',
+    iconClass: isTrendingUp ? 'icon-up' : isNeutral ? 'icon-neutral' : 'icon-down',
   };
 }
 
 export function timeAgo(date: string | number | Date): string {
   const now = new Date();
   const past = new Date(date);
+  if (isNaN(past.getTime())) return 'Invalid date';
   const diff = now.getTime() - past.getTime(); // difference in ms
 
   const seconds = Math.floor(diff / 1000);
@@ -86,6 +89,10 @@ export const buildPageNumbers = (
   currentPage: number,
   totalPages: number,
 ): (number | typeof ELLIPSIS)[] => {
+  if (totalPages <= 0) return [];
+
+  currentPage = Math.max(1, Math.min(currentPage, totalPages));
+
   const MAX_VISIBLE_PAGES = 5;
 
   const pages: (number | typeof ELLIPSIS)[] = [];
