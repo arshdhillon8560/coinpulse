@@ -1,3 +1,4 @@
+/// <reference path="../../../../type.d.ts" />
 import { NextResponse } from 'next/server';
 import { fetcher } from '@/lib/coingecko.actions';
 
