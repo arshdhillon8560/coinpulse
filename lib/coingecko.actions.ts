@@ -57,3 +57,9 @@ export async function fetcher<T>(
     clearTimeout(timeoutId);
   }
 }
+
+export async function getPools(coinId: string, network?: string, contractAddress?: string): Promise<PoolData | null> {
+  // For demo plan, return null as pool data requires pro plan
+  // This function is kept for compatibility but doesn't fetch real data
+  return null;
+}
