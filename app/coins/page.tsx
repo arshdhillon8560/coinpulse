@@ -9,7 +9,8 @@ import CoinsPagination from '@/components/CoinsPagination';
 const Coins = async ({ searchParams }: NextPageProps) => {
   const { page } = await searchParams;
 
-  const currentPage = Number(page) || 1;
+  const parsedPage = Number(page);
+  const currentPage = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
   const perPage = 10;
 
   const coinsData = await fetcher<CoinMarketData[]>('/coins/markets', {
@@ -37,7 +38,7 @@ const Coins = async ({ searchParams }: NextPageProps) => {
       cellClassName: 'token-cell',
       cell: (coin) => (
         <div className="token-info">
-          <Image src={coin.image} alt={coin.name} width={36} height={36} />
+          <Image src={coin.image || '/logo.svg'} alt={coin.name} width={36} height={36} />
           <p>
             {coin.name} ({coin.symbol.toUpperCase()})
           </p>

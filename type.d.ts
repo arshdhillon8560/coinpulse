@@ -293,11 +293,6 @@ type PaginationLinkProps = {
   size?: ButtonSize;
 } & React.ComponentProps<'a'>;
 
-interface Pagination {
-  currentPage: number;
-  totalPages: number;
-  hasMorePages: boolean;
-}
 
 interface HeaderProps {
   trendingCoins: TrendingCoin[];

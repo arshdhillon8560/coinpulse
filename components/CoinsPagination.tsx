@@ -11,8 +11,9 @@ import {
 } from '@/components/ui/pagination';
 import { useRouter } from 'next/navigation';
 import { buildPageNumbers, cn, ELLIPSIS } from '@/lib/utils';
+import type { Pagination as PaginationProps } from '@/types/pagination';
 
-const CoinsPagination = ({ currentPage, totalPages, hasMorePages }: Pagination) => {
+const CoinsPagination = ({ currentPage, totalPages, hasMorePages }: PaginationProps) => {
   const router = useRouter();
 
   const handlePageChange = (page: number) => {
@@ -36,7 +37,7 @@ const CoinsPagination = ({ currentPage, totalPages, hasMorePages }: Pagination) 
           {pageNumbers.map((page, index) => (
             <PaginationItem key={index}>
               {page === ELLIPSIS ? (
-                <span className="ellipsis">...</span>
+                <PaginationEllipsis className="ellipsis" />
               ) : (
                 <PaginationLink
                   onClick={() => handlePageChange(page)}
