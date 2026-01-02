@@ -93,7 +93,7 @@ import {
   
   export const PERIOD_CONFIG: Record<
     Period,
-    { days: number | string }
+    { days: number }
   > = {
     daily: { days: 1 },
     weekly: { days: 7 },
@@ -101,7 +101,7 @@ import {
     '3months': { days: 90 },
     '6months': { days: 180 },
     yearly: { days: 365 },
-    max: { days: 'max' },
+    max: { days: 365 }, // Use same as yearly for now - CoinGecko limits OHLC data
   };
   
   export const PERIOD_BUTTONS: { value: Period; label: string }[] = [
