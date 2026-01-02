@@ -1,6 +1,6 @@
-/// <reference path="../../../../type.d.ts" />
 import { NextResponse } from 'next/server';
 import { fetcher } from '@/lib/coingecko.actions';
+import type { TrendingCoin } from '@/types';
 
 export async function GET() {
   try {
