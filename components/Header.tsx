@@ -26,7 +26,7 @@ const Header = () => {
             Home
           </Link>
 
-          <p>Search Modal</p>
+          <p>Search Coin</p>
 
           <Link
             href="/coins"

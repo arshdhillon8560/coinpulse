@@ -14,11 +14,12 @@ interface StaticDataProps {
 
 const StaticDataWrapper = ({ coinId, coin, coinOHLCData }: StaticDataProps) => {
   // Create mock trades data (same structure as LiveDataWrapper)
+  // Use fixed values to prevent hydration mismatches between server and client
   const mockTrades: Trade[] = [
     {
-      price: coin.market_data.current_price.usd,
+      price: 45000.50,
       amount: 50.1234,
-      value: coin.market_data.current_price.usd * 50.1234,
+      value: 2257000.00,
       type: 'b',
       timestamp: Date.now() - 30000,
     },

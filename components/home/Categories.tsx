@@ -28,27 +28,47 @@ const Categories = async () => {
         header: 'Top Gainers',
         cellClassName: 'top-gainers-cell',
         cell: (category) =>
-          category.top_3_coins.slice(0, 3).map((coin, idx) => (
-            <div key={coin} className="relative">
-              <Image
-                src={coin}
-                alt={coin}
-                width={28}
-                height={28}
-                className={cn(
-                  "rounded-full border-2 transition-all hover:scale-110",
-                  idx === 0 ? "border-yellow-500" :
-                  idx === 1 ? "border-gray-400" :
-                  "border-purple-600"
+          category.top_3_coins.slice(0, 3).map((coin, idx) => {
+            // Extract coin name from URL path for accessibility
+            const extractCoinName = (url: string): string => {
+              try {
+                const pathParts = url.split('/');
+                const filename = pathParts[pathParts.length - 1];
+                const coinName = filename.split('.')[0]; // Remove file extension
+                // Convert to readable format (e.g., "bitcoin-cash" -> "Bitcoin Cash")
+                return coinName
+                  .split('-')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ');
+              } catch {
+                return 'Cryptocurrency';
+              }
+            };
+
+            const coinName = extractCoinName(coin);
+
+            return (
+              <div key={coin} className="relative">
+                <Image
+                  src={coin}
+                  alt={`${coinName} cryptocurrency logo`}
+                  width={28}
+                  height={28}
+                  className={cn(
+                    "rounded-full border-2 transition-all hover:scale-110",
+                    idx === 0 ? "border-yellow-500" :
+                    idx === 1 ? "border-gray-400" :
+                    "border-purple-600"
+                  )}
+                />
+                {idx === 0 && (
+                  <span className="absolute -top-1 -right-1 text-xs bg-yellow-500 text-dark-900 rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                    1
+                  </span>
                 )}
-              />
-              {idx === 0 && (
-                <span className="absolute -top-1 -right-1 text-xs bg-yellow-500 text-dark-900 rounded-full w-4 h-4 flex items-center justify-center font-bold">
-                  1
-                </span>
-              )}
-            </div>
-          )),
+              </div>
+            );
+          }),
       },
       {
         header: '24h Change',
